@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+  <meta name="description" content="GameHub — 10 premium arcade games. Play instantly in your browser on any device." />
+  <meta name="theme-color" content="#050818" />
+  <title>GameHub — Arcade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!-- Animated background canvas -->
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <!-- App root -->
+  <div id="app"></div>
+
+  <!-- ============================================================
+       Auth Modal
+       ============================================================ -->
+  <div class="modal-overlay" id="auth-modal" role="dialog" aria-modal="true" aria-label="Authentication">
+    <div class="modal-card glass">
+      <button class="modal-close" id="auth-close" aria-label="Close">✕</button>
+      <h2 id="auth-title" class="modal-title">🔐 Sign In</h2>
+
+      <!-- Login Form -->
+      <div id="auth-login-form">
+        <div class="modal-field">
+          <label>Email</label>
+          <input type="email" id="auth-email" placeholder="your@email.com" autocomplete="email" />
+        </div>
+        <div class="modal-field">
+          <label>Password</label>
+          <input type="password" id="auth-password" placeholder="Password" autocomplete="current-password" />
+        </div>
+        <p id="auth-error" class="modal-error"></p>
+        <button class="btn-primary" id="btn-login">Sign In</button>
+        <button class="btn-google" id="btn-google-login">
+          <svg width="18" height="18" viewBox="0 0 18 18">
+            <path fill="#4285F4"
+              d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" />
+            <path fill="#34A853"
+              d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.909-2.259c-.806.54-1.837.86-3.047.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" />
+            <path fill="#FBBC05"
+              d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z" />
+            <path fill="#EA4335"
+              d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" />
+          </svg>
+          Continue with Google
+        </button>
+        <p class="modal-switch">Don't have an account? <a href="#" id="show-signup">Create one</a></p>
+      </div>
+
+      <!-- Signup Form -->
+      <div id="auth-signup-form" style="display:none">
+        <div class="modal-field">
+          <label>Display Name</label>
+          <input type="text" id="signup-name" placeholder="Your name" autocomplete="name" />
+        </div>
+        <div class="modal-field">
+          <label>Email</label>
+          <input type="email" id="signup-email" placeholder="your@email.com" autocomplete="email" />
+        </div>
+        <div class="modal-field">
+          <label>Password</label>
+          <input type="password" id="signup-password" placeholder="At least 6 characters" autocomplete="new-password" />
+        </div>
+        <div class="modal-field">
+          <label>Confirm Password</label>
+          <input type="password" id="signup-confirm" placeholder="Repeat password" autocomplete="new-password" />
+        </div>
+        <p id="signup-error" class="modal-error"></p>
+        <button class="btn-primary" id="btn-signup">Create Account</button>
+        <button class="btn-google" id="btn-google-signup">
+          <svg width="18" height="18" viewBox="0 0 18 18">
+            <path fill="#4285F4"
+              d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" />
+            <path fill="#34A853"
+              d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.909-2.259c-.806.54-1.837.86-3.047.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" />
+            <path fill="#FBBC05"
+              d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z" />
+            <path fill="#EA4335"
+              d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" />
+          </svg>
+          Continue with Google
+        </button>
+        <p class="modal-switch">Already have an account? <a href="#" id="show-login">Sign in</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       Settings Modal
+       ============================================================ -->
+  <div class="modal-overlay" id="settings-modal" role="dialog" aria-modal="true" aria-label="Settings">
+    <div class="modal-card glass">
+      <button class="modal-close" id="settings-close" aria-label="Close">✕</button>
+      <h2 class="modal-title">⚙️ Settings</h2>
+
+      <div class="settings-list">
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-label">🌙 Dark Mode</span>
+            <span class="setting-hint">High-contrast neon theme</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-dark" />
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-label">🔊 Sound</span>
+            <span class="setting-hint">In-game audio</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-sound" />
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-label">🕹️ Mobile Controls</span>
+            <span class="setting-hint">On-screen buttons for touch devices</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-mobile-controls" />
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-label">📳 Vibration</span>
+            <span class="setting-hint">Haptic feedback on mobile</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-vibration" />
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-label">☁️ Cloud Sync</span>
+            <span class="setting-hint">Sync high scores across devices</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-cloud-sync" />
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          </label>
+        </div>
+
+        <div class="setting-row" style="margin-top:8px;">
+          <button class="btn-danger" id="btn-reset-scores" style="width:100%;">🗑️ Reset All High Scores</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase auth (ESM dynamic imports inside auth.js) -->
+  <script src="auth.js"></script>
+
+  <!-- Background -->
+  <script src="bg.js"></script>
+
+  <!-- App -->
+  <script src="app.js"></script>
+
+</body>
+
+</html>

@@ -594,10 +594,12 @@
       try {
         await window.GameHubAuth.init();
         window.GameHubAuth.onAuthStateChanged(async user => {
-          if (user) await syncCloud();
-          else window.showAuthModal('login');
-          const hash = location.hash.replace('#', '');
-          if (!hash || !GAMES.find(g => g.id === hash)) renderHub();
+          if (user) {
+            await syncCloud();
+            const hash = location.hash.replace('#', '');
+            if (!hash || !GAMES.find(g => g.id === hash)) renderHub();
+          }
+          // No modal forced — guests can play freely
         });
       } catch (e) { console.warn('[GameHub] Firebase init:', e); }
     }
